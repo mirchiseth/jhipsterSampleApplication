@@ -14,16 +14,9 @@ cache:
     - node_modules
     - $HOME/.m2
     - $HOME/.yarn-cache
-env:
-  global:
-    - NODE_VERSION=8.9.4
-    - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
-    - SPRING_JPA_SHOW_SQL=false
 before_install:
   - jdk_switcher use oraclejdk8
   - java -version
-  - sudo /etc/init.d/mysql stop
-  - sudo /etc/init.d/postgresql stop
   # Repo for Yarn
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH=$HOME/.yarn/bin:$PATH
@@ -34,6 +27,19 @@ script:
   - ./mvnw clean test
   - yarn test
   - ./mvnw verify -Pprod -DskipTests
+before_deploy:
+  - mvn help:evaluate -N -Dexpression=project.version|grep -v '\['
+  - export project_version=$(mvn help:evaluate -N -Dexpression=project.version|grep -v '\[')
+deploy:
+  - provider: releases
+    api_key:
+      secure: vPVfvv/VtW3fwk7yN5RgyQ/7+bA/e4EaT/ZyRo5T0/OTkhPbs4NtyVBgffG9Ic0kv5qcRvlRMQFQlogoX0PTOHEmWOvGKzbOdzAq1mBZA9DPAfj1T3aTWADUqgepcF6DVLHF6qNbuQ6kxwoZd7qgYmz8aP5acfid/G5555slijrQyDvKXy0ew8oZ6WAQfA6xzYBvElaym8cwfrp5h6CGVo4DCwbSsU0sczQMjwbOoxGzsKMTGJ4PUDojMyeL/PRDKbu4GXJ97aEGn9IwARbHwD9aesELl+jt5cYG6KsE4VOwSmTI4e9tCxWMCQISwHyfHoJsZTCXWstsCD+hgwKnbPN4hm/Hl1QniyYxgX9wURtb/A6mG3kNMizKDUDin65ZI5LMPz5MWE31bKEmGWzBEnSyTgK1BAy9L6TW4YTwTHhiElDn5EfahjukmlBuV+foeqDayveh6mjtPsccIEfwrh8UQMPyqiCpedsk0WOs7YSgNT0znq4XXrgthYlWtCactxDl/eRp7JH12zeuvdJ50jtvTs1ISEdH4FKhAzOSVSx/Vgfi9b7IvQmxdpxdgnQsG2ywBqZc5iVAbOAzM3P+fjKc9ca8zD5cNIUJDuz1L39+TB3lRfJD5yDac4Tn8WrrZzMoTF3FgyzAzbQq9mCzYXK/k0kRWdhqGKA4NUHBEow=
+    file: 
+      - target/jhipster-sample-application-0.0.1-SNAPSHOT.war
+    skip_cleanup: true
+    on:
+      repo: mirchiseth/jhipsterSampleApplication
+      name: $project_version 
 notifications:
   webhooks:
     on_success: change  # options: [always|never|change] default: always
