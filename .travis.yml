@@ -27,6 +27,16 @@ script:
   - ./mvnw clean test
   - yarn test
   - ./mvnw verify -Pprod -DskipTests
+deploy:
+  provider: releases
+  api_key:
+    secure: qIh/fwg2SqIF+bdpij0nOHUxt0begNQ5qiByLj8wD1RtINdzbH3hw+unEWPVtJ8YKuP86ylI/KNUXYysARYCnM0PfoPTmfCNPfM5uAfEDckEvlUdhRPCOiNAEeH7PR/EIYBAWblt0oi5jDx0ME0qAmKq+vE8ZwtFn9pw6PHJhES/xs0mD+5sTsMW96RcSugPuOcT+cXNQyjbJymByY9q2wa9l+JxxxIQHA2PEHQE47g4anmY/VIsCQG8a0srv19gmSXeyHt5QwsJ+iuIjJsiTUUxzJGf9lhRRsXHqMTq4MPekvyHI93nZ+xBTTyXyVSvUoWS9BCBf9q2q6XpIr3uNnj7Z0S7JFMuXO7cPNl1MqwYFKoTe++/x84RQkhJ9xOi/fRM2lihC/iO5dUE2sDGCqE1zIYiaMuK1T69YHd5leAxVtQWOZDYrlvWYDqZmKXIh6+CaI0+JjoK4mXV32DTlbi+8H98lOXMxi+KHbsXQQKu0k6b9oVyk9bXJbjg+2irYTX82cUiueUkDZSzEl2DIJSJ9VqSsh9vpAsQSbKcrsp8ldXgpi6ufqxDDBiuNqrLixteh+Tjt73hrPJ6/at4TLvaBwXDfiheWXCft+UYZnUsIPoq0fTPm5kpQcODdegQDXFHEsMo1T5+0u6IxzYrtnROXD7O4aqGgt5JiGfV014=
+  file: 
+    - target/jhipster-sample-application-0.0.1-SNAPSHOT.war
+  skip_cleanup: true
+  on:
+    repo: mirchiseth/jhipsterSampleApplication
+    name: 0.1.1
 notifications:
   webhooks:
     on_success: change  # options: [always|never|change] default: always
